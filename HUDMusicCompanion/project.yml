@@ -1,0 +1,49 @@
+name: HUDMusicCompanion
+options:
+  bundleIdPrefix: com.yourname
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+
+packages:
+  Telegraph:
+    url: https://github.com/Building42/Telegraph.git
+    from: "0.30.0"
+
+targets:
+  HUDMusicCompanion:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+
+    sources:
+      - path: HUDMusicCompanion
+        excludes:
+          - "**/*.plist"   # Info.plist handled separately below
+
+    info:
+      path: HUDMusicCompanion/Info.plist
+      properties:
+        UIBackgroundModes:
+          - audio
+          - processing
+        NSAppleMusicUsageDescription: "HUD Music Companion accesses Apple Music to retrieve track details, playback states, and artwork to display on your G2 glasses."
+
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yourname.hudmusiccompanion
+        SWIFT_VERSION: 5.9
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: 1
+        INFOPLIST_FILE: HUDMusicCompanion/Info.plist
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""    # User fills their Team ID or configures in Xcode
+
+    dependencies:
+      - package: Telegraph
+
+    entitlements:
+      path: HUDMusicCompanion/HUDMusicCompanion.entitlements
+
+    scheme:
+      testTargets: []

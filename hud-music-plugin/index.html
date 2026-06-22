@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <title>HUD Music - Apple Music Bridge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-color: #0d0e12;
+        --accent-color: #00FF66;
+        --accent-hover: #00E65C;
+        --card-bg: rgba(22, 24, 30, 0.7);
+        --card-border: rgba(255, 255, 255, 0.08);
+        --text-primary: #f3f4f6;
+        --text-secondary: #9ca3af;
+      }
+      
+      html, body {
+        margin: 0;
+        height: 100%;
+        background-color: var(--bg-color);
+        background-image: 
+          radial-gradient(at 0% 0%, rgba(0, 255, 102, 0.05) 0px, transparent 50%),
+          radial-gradient(at 100% 100%, rgba(0, 255, 102, 0.02) 0px, transparent 50%);
+        color: var(--text-primary);
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+        touch-action: manipulation;
+        -webkit-text-size-adjust: 100%;
+        overscroll-behavior: none;
+      }
+
+      #app {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      header {
+        margin-bottom: 24px;
+      }
+
+      h1 {
+        font-size: 32px;
+        font-weight: 800;
+        margin: 0 0 6px 0;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #ffffff 30%, var(--accent-color) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      p.subtitle {
+        color: var(--text-secondary);
+        font-size: 15px;
+        margin: 0;
+        font-weight: 300;
+      }
+
+      .config-panel {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 20px;
+        padding: 28px;
+        width: 100%;
+        max-width: 340px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-sizing: border-box;
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+      }
+      
+      .config-panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 102, 0.05);
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+
+      label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+
+      input {
+        width: 100%;
+        background: rgba(10, 11, 14, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 12px 14px;
+        color: var(--text-primary);
+        font-size: 15px;
+        font-family: 'JetBrains Mono', monospace;
+        box-sizing: border-box;
+        transition: border-color 0.25s, box-shadow 0.25s;
+      }
+
+      input:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(0, 255, 102, 0.15);
+        outline: none;
+      }
+
+      button {
+        width: 100%;
+        background: var(--accent-color);
+        color: #07080a;
+        border: none;
+        border-radius: 10px;
+        padding: 14px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+        margin-top: 8px;
+      }
+
+      button:hover {
+        background-color: var(--accent-hover);
+        box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+      }
+
+      button:active {
+        transform: scale(0.98);
+      }
+
+      .status-box {
+        margin-top: 24px;
+        font-size: 14px;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: center;
+      }
+
+      .pulse-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #6b7280;
+        transition: background-color 0.3s;
+      }
+
+      .pulse-dot.connecting {
+        background-color: #f59e0b;
+        animation: pulse 1.5s infinite;
+      }
+
+      .pulse-dot.connected {
+        background-color: var(--accent-color);
+        box-shadow: 0 0 8px var(--accent-color);
+      }
+
+      .pulse-dot.error {
+        background-color: #ef4444;
+      }
+
+      #connection-status {
+        font-weight: 600;
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      @keyframes pulse {
+        0% { transform: scale(0.95); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(0.95); opacity: 0.5; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <h1>HUD Music</h1>
+        <p class="subtitle">Even G2 Apple Music Controller</p>
+      </header>
+      
+      <div class="config-panel">
+        <div class="input-group">
+          <label for="bridge-ip">Bridge Host/IP</label>
+          <input type="text" id="bridge-ip" placeholder="localhost" />
+        </div>
+        
+        <div class="input-group">
+          <label for="bridge-port">Bridge Port</label>
+          <input type="text" id="bridge-port" placeholder="8766" />
+        </div>
+        
+        <button id="save-config">Connect Bridge</button>
+      </div>
+
+      <div class="status-box">
+        <div id="status-dot" class="pulse-dot connecting"></div>
+        <span>Status: <span id="connection-status">Connecting...</span></span>
+      </div>
+    </div>
+    
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

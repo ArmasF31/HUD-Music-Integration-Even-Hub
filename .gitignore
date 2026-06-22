@@ -1,0 +1,20 @@
+# Node / Web Plugin
+node_modules/
+dist/
+*.ehpk
+.env
+.env.local
+.env.*.local
+
+# OS Metadata
+.DS_Store
+Thumbs.db
+
+# Xcode / Apple Swift
+build/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+.xcworkspace/
+*.xcuserstate
+*.xcworkspace
