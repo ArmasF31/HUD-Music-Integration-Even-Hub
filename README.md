@@ -71,3 +71,11 @@ npx @evenrealities/evenhub-simulator http://localhost:5173
   - `src/main.ts`: Event routing, startup page container setup, and gesture handling.
   - `src/bridge.ts`: HTTP polling and endpoint dispatch logic.
   - `src/display.ts`: Typography wrapping, progress bar generation, and canvas operations.
+
+---
+
+## 👥 Contributors
+
+* **[ArmasF31](https://github.com/ArmasF31)** — Project Creator & Lead Developer
+* **Antigravity** — AI Coding Assistant by Google DeepMind
+* **Claude** — AI Assistant by Anthropic
