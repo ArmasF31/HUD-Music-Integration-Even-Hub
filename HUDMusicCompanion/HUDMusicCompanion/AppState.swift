@@ -29,6 +29,7 @@ final class AppState: ObservableObject {
     private var demoTimer: Timer?
     private var demoProgress: Double = 0
     private var demoTrackIndex = 0
+    private var hasStarted = false
     
     // Mock tracks for Demo Mode
     private let demoTracks = [
@@ -50,6 +51,13 @@ final class AppState: ObservableObject {
     }
     
     func start() {
+        if hasStarted {
+            log("HUD Music Companion already started")
+            serverManager?.startServer()
+            return
+        }
+
+        hasStarted = true
         musicManager = MusicManager(state: self)
         serverManager = BridgeServerManager(state: self, port: serverPort)
         
@@ -66,20 +74,25 @@ final class AppState: ObservableObject {
         }
     }
     
-    func getMusicStatusJSON() -> String {
+    func getMusicStatusJSON(includeArtwork: Bool = false) -> String {
         if !demoActive {
             musicManager.updateProgressOnly()
         }
         
         let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
+        encoder.outputFormatting = []
         
         struct Response: Codable {
             let music: MusicStatus
             let serverVersion: String
         }
         
-        let response = Response(music: music, serverVersion: "1.0.0")
+        var responseMusic = music
+        if !includeArtwork {
+            responseMusic.artwork = ""
+        }
+
+        let response = Response(music: responseMusic, serverVersion: "1.0.0")
         
         if let data = try? encoder.encode(response),
            let jsonStr = String(data: data, encoding: .utf8) {
@@ -220,11 +233,14 @@ final class AppState: ObservableObject {
 
     private func handleDidEnterBackground() {
         log("Entered background. Activating BackgroundKeeper to keep server active.")
+        serverManager.startServer()
         backgroundKeeper.start()
     }
 
     private func handleWillEnterForeground() {
         log("Entering foreground. Stopping BackgroundKeeper.")
         backgroundKeeper.stop()
+        serverManager.startServer()
+        musicManager.refreshStatus()
     }
 }

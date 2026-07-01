@@ -33,8 +33,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.yourname.hudmusiccompanion
         SWIFT_VERSION: 5.9
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: "1.0.1"
+        CURRENT_PROJECT_VERSION: 2
         INFOPLIST_FILE: HUDMusicCompanion/Info.plist
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: ""    # User fills their Team ID or configures in Xcode

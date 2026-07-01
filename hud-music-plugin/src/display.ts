@@ -91,8 +91,8 @@ export async function processArtwork(base64: string): Promise<string> {
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {
-      const width = 110;
-      const height = 110;
+      const width = 64;  // Reduced from 110 to 64 for BLE bandwidth safety
+      const height = 64; // Reduced from 110 to 64 for BLE bandwidth safety
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
@@ -182,8 +182,8 @@ function adjustPixel(data: Uint8ClampedArray, idx: number, amount: number) {
 
 // Draw a default music note image
 export function drawDefaultArtwork(): string {
-  const width = 110;
-  const height = 110;
+  const width = 64;  // Reduced from 110 to 64 to match BLE bandwidth safety
+  const height = 64; // Reduced from 110 to 64 to match BLE bandwidth safety
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
@@ -195,35 +195,35 @@ export function drawDefaultArtwork(): string {
   
   // Outer frame
   ctx.strokeStyle = '#00FF66';
-  ctx.lineWidth = 4;
-  ctx.strokeRect(10, 10, width - 20, height - 20);
+  ctx.lineWidth = 2.5;
+  ctx.strokeRect(6, 6, width - 12, height - 12);
   
   // Draw double eighth note
   ctx.fillStyle = '#00FF66';
   ctx.strokeStyle = '#00FF66';
-  ctx.lineWidth = 6;
+  ctx.lineWidth = 3.5;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
   
   // Draw note heads
   ctx.beginPath();
-  ctx.arc(35, 75, 10, 0, 2 * Math.PI);
-  ctx.arc(70, 65, 10, 0, 2 * Math.PI);
+  ctx.arc(20, 43, 6, 0, 2 * Math.PI);
+  ctx.arc(41, 37, 6, 0, 2 * Math.PI);
   ctx.fill();
   
   // Draw stems
   ctx.beginPath();
-  ctx.moveTo(45, 75);
-  ctx.lineTo(45, 30);
-  ctx.lineTo(80, 20);
-  ctx.lineTo(80, 65);
+  ctx.moveTo(26, 43);
+  ctx.lineTo(26, 17);
+  ctx.lineTo(47, 11);
+  ctx.lineTo(47, 37);
   ctx.stroke();
   
   // Draw beam
   ctx.beginPath();
-  ctx.moveTo(45, 30);
-  ctx.lineTo(80, 20);
-  ctx.lineWidth = 10;
+  ctx.moveTo(26, 17);
+  ctx.lineTo(47, 11);
+  ctx.lineWidth = 6;
   ctx.stroke();
   
   const dataUrl = canvas.toDataURL('image/png');

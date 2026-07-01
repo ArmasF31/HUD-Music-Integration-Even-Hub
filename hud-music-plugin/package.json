@@ -1,7 +1,7 @@
 {
   "name": "hud-music-plugin",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.1.8",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,6 @@
     "vite": "^8.0.12"
   },
   "dependencies": {
-    "@evenrealities/even_hub_sdk": "^0.0.10"
+    "@evenrealities/even_hub_sdk": "^0.0.11"
   }
 }

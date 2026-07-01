@@ -29,7 +29,6 @@ final class BackgroundKeeper {
         
         do {
             try engine.start()
-            player.play()
             
             // Create a 1-second PCM buffer filled with silence (zeros)
             let frameCount = UInt32(format.sampleRate)
@@ -43,6 +42,8 @@ final class BackgroundKeeper {
                 // Schedule to loop indefinitely
                 player.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
             }
+
+            player.play()
             
             self.audioEngine = engine
             self.audioPlayer = player

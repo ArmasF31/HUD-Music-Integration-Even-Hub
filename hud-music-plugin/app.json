@@ -2,17 +2,16 @@
   "package_id": "com.armas.hudmusic",
   "edition": "202601",
   "name": "HUD Music",
-  "version": "1.0.0",
+  "version": "2.1.8",
   "min_app_version": "2.0.0",
-  "min_sdk_version": "0.0.7",
+  "min_sdk_version": "0.0.11",
   "entrypoint": "index.html",
   "permissions": [
     {
       "name": "network",
       "desc": "Access companion app on localhost for live Apple Music status and playback controls.",
       "whitelist": [
-        "http://localhost:8766",
-        "http://127.0.0.1:8766"
+        "*"
       ]
     }
   ],
